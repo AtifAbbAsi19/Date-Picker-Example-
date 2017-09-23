@@ -49,31 +49,36 @@ public class DatePickerFragment extends DialogFragment {
 
         datePickerDialog = new DatePickerDialog(getActivity(), onDateSet,
                 year, month, day);
+//
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-            calendar.add(Calendar.DATE, Constants.DateAndMonth.CURRENT_DAY);//Current day
-            // Set the Calendar new date as maximum date of date picker
-            datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+        // calendar.add(Calendar.DATE, Constants.DateAndMonth.CURRENT_DAY);//Current day
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        // Set the Calendar new date as maximum date of date picker
+        datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
 
-            // Subtract 90 days from Calendar updated date
-            calendar.add(Calendar.DATE, -Constants.DateAndMonth.LAST_NINETY_DAY);
 
-            // Set the Calendar new date as minimum date of date picker
-            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+        // Subtract 90 days from Calendar updated date
+        calendar.add(Calendar.DATE, -Constants.DateAndMonth.LAST_NINETY_DAY);
 
+        // Set the Calendar new date as minimum date of date picker
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             datePickerDialog.setTitle("");//Prevent Date picker from creating extra Title.!
-            return datePickerDialog;
-        } else {
-
-            //calendar.add(Calendar.DATE, 0);//Current day
-            //calculate min and max dates (for older versions use Current TimeMillis
-            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-            // Subtract 90 days from Calendar updated date
-            calendar.add(Calendar.DATE, -Constants.DateAndMonth.LAST_NINETY_DAY);
-
-            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
-            return datePickerDialog;
         }
+
+        return datePickerDialog;
+//        } else {
+//
+//            //calendar.add(Calendar.DATE, 0);//Current day
+//            //calculate min and max dates (for older versions use Current TimeMillis
+//            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+//            // Subtract 90 days from Calendar updated date
+//            calendar.add(Calendar.DATE, -Constants.DateAndMonth.LAST_NINETY_DAY);
+//
+//            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+//            return datePickerDialog;
+//        }
 
 
     }
