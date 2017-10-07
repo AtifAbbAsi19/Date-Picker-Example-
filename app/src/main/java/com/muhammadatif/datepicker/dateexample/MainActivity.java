@@ -11,6 +11,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.muhammadatif.datepicker.dateexample.application.AppClass;
 import com.muhammadatif.datepicker.dateexample.dialogfragment.AllDatePickerFragment;
 import com.muhammadatif.datepicker.dateexample.dialogfragment.DatePickerFragment;
 import com.muhammadatif.datepicker.dateexample.globals.Constants;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        AppClass.initializeCustomFonts(getAssets());
+       AppClass.initializeCustomFonts(getAssets());
 
         init();
         UiListener();
