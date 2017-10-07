@@ -57,9 +57,6 @@ public class Tools {
     public static String calculateTime(long seconds) {
 
         String time="";
-
-
-
         int day = (int) (seconds / (1000 * 60 * 60 * 24));
         int hours = (int) ((seconds - (1000 * 60 * 60 * 24 * day)) / (1000 * 60 * 60));
         int minute = (int) (seconds - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hours)) / (1000 * 60);
@@ -69,35 +66,35 @@ public class Tools {
 
         if(day>0){
             if(day==1){
-                time =time+day+" day";
+                time =day+" day";
             }else{
-                time =time+day+" days";
+                time =day+" days";
             }
         }else if(day<1 && hours>0){
 
             if(hours==1){
-                time =time+hours +" hr";
+                time =hours +" hr";
             }else{
-                time =time+hours +" hrs";
+                time =hours +" hrs";
             }
         }else if(hours<1 && minute>0){
             if(minute==1){
-                time =time+minute +" min";
+                time =minute +" min";
             }else{
-                time =time+minute +" mins";
+                time =minute +" mins";
             }
         }else if(minute<1 && second>0){
 
             if(second==1){
-                time =time+second +" sec";
+                time =second +" sec";
             }else{
-                time =time+second +" secs";
+                time =second +" secs";
             }
         }else {
             if(second==1){
-                time =time+second +" sec";
+                time =second +" sec";
             }else{
-                time =time+second +" secs";
+                time =second +" secs";
             }
         }
 
@@ -138,51 +135,12 @@ public class Tools {
         Date startDate = startDateFormat.parse(dateString);
         // format the java.util.Date object to the desired format
         String startDateString = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_TIME_FORMAT).format(startDate);
-
-        long startMili = Tools.getMiliSecondsFromDateANDTIME(startDateString);
-        long endMili = Tools.getMiliSecondsFromDateANDTIME(currentDateAndTime);
-
+//        long startMili = Tools.getMiliSecondsFromDateANDTIME(startDateString);
+//        long endMili = Tools.getMiliSecondsFromDateANDTIME(currentDateAndTime);
         long difference = endDate.getTime() - startDate.getTime();
-//       // float difference = getDifferenceTimeInSec(startDate,endDate);
-//        int days = (int) (difference / (1000 * 60 * 60 * 24));
-//        int hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
-//        int min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
-//        if (hours < 0) {
-//            hours += 24;
-//        }
-//        if (min < 0) {
-//            float newone = (float) min / 60;
-//            min += 60;
-//            hours = (int) (hours + newone);
-//        }
-//
-//        MINUTES=min + MINUTES+ ".";
-//        HOURS=hours + HOURS + ".";
-//        DAYS=  days + DAYS;
-//
-//        if(min==0){
-//            MINUTES="";
-//        }
-//        if(hours==0){
-//            HOURS="";
-//        }
-//        if(days==0){
-//            DAYS="";
-//        }
-//
-//        if(days==1){
-//          minutesHoursDays = YESTERDAY;
-//        }else{
-//            minutesHoursDays =  MINUTES+HOURS+DAYS;
-//        }
-//
+
 //        String[] separated = minutesHoursDays.split(":");
-//
-//      //  minutesHoursDays =  MINUTES+HOURS+DAYS;
-
-
-
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
+//        long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
 
         String minutesHoursDays=calculateTime(difference);
 
@@ -203,20 +161,6 @@ public class Tools {
         miliSec = date.getTime();
         return miliSec;
     }
-
-
-    public static boolean hasValue(String value) {
-        try {
-            if (value != null && !value.equalsIgnoreCase("null") && !value.equalsIgnoreCase("")) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
 
     public static int getYear(Date date) {
         Calendar cal = Calendar.getInstance();
