@@ -62,8 +62,6 @@ public class Tools {
         int minute = (int) (seconds - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hours)) / (1000 * 60);
         int second = (int) ((seconds / 1000) % 60);
 
-
-
         if(day>0){
             if(day==1){
                 time =day+" day";
@@ -97,7 +95,6 @@ public class Tools {
                 time =second +" secs";
             }
         }
-
 //        int day = (int)TimeUnit.SECONDS.toDays(seconds);
 //        long hours = TimeUnit.SECONDS.toHours(seconds) - (day *24);
 //        long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds)* 60);
