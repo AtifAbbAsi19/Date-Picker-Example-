@@ -49,13 +49,11 @@ public class DatePickerFragment extends DialogFragment {
 
         datePickerDialog = new DatePickerDialog(getActivity(), onDateSet,
                 year, month, day);
-//
 
         // calendar.add(Calendar.DATE, Constants.DateAndMonth.CURRENT_DAY);//Current day
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         // Set the Calendar new date as maximum date of date picker
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-
 
         // Subtract 90 days from Calendar updated date
         calendar.add(Calendar.DATE, -Constants.DateAndMonth.LAST_NINETY_DAY);
@@ -68,18 +66,6 @@ public class DatePickerFragment extends DialogFragment {
         }
 
         return datePickerDialog;
-//        } else {
-//
-//            //calendar.add(Calendar.DATE, 0);//Current day
-//            //calculate min and max dates (for older versions use Current TimeMillis
-//            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-//            // Subtract 90 days from Calendar updated date
-//            calendar.add(Calendar.DATE, -Constants.DateAndMonth.LAST_NINETY_DAY);
-//
-//            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
-//            return datePickerDialog;
-//        }
-
 
     }
 }

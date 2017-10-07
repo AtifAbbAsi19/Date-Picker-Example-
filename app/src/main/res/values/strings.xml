@@ -3,4 +3,5 @@
     <string name="dateBtn">Select Specific Date</string>
     <string name="selectSpecificDate">Select Specific Date</string>
     <string name="allDates">Select Any Date</string>
+    <string name="selectDate">Select Date BY Clicking View</string>
 </resources>

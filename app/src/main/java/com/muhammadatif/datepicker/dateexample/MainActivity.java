@@ -1,7 +1,9 @@
 package com.muhammadatif.datepicker.dateexample;
 
 import android.app.DatePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.ActionProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -13,9 +15,14 @@ import com.muhammadatif.datepicker.dateexample.dialogfragment.AllDatePickerFragm
 import com.muhammadatif.datepicker.dateexample.dialogfragment.DatePickerFragment;
 import com.muhammadatif.datepicker.dateexample.globals.Constants;
 import com.muhammadatif.datepicker.dateexample.utilities.Tools;
+import com.muhammadatif.datepicker.dateexample.widgets.CustomCalender;
+import com.muhammadatif.datepicker.dateexample.widgets.TextViewNormal;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
     TextView date, monthDate, ninetyDays;
     Button specificDateBtn, allDateBtn;
 
-    String DATESTRING = "2017-10-01 00:00:00";
-    String monthName;
+    String SAMPLE_DATE_FORMAT_STRING = "2017-10-01 00:00:00";
+    String SAMPLE_TIME_FORMAT_STRING = "2017-10-07 18:17:05";
 
-    int getDate = 7;
-    int getMonth = 30;
-    int getNinetyDays = 90;
+    String dateOne, dateTwo;
+
+    TextViewNormal tvDateOne, tvDateTwo, timeViewer;
 
 
     @Override
@@ -36,44 +43,73 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        AppClass.initializeCustomFonts(getAssets());
+
         init();
+        UiListener();
 
         try {
-            date.setText(Tools.getMonthNameAndDateFormat(DATESTRING));
+            setDefaultDate();
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if (getDate == 7) {
-            try {
-                DATESTRING = "2017-09-20 00:00:00";
 
-                date.setText("last Seven Days::" + Tools.getMinDate(DATESTRING, Constants.DateAndMonth.LAST_SEVEN_DAY));
-                // Toast.makeText(MainActivity.this, "Last Seven Days"+getLastSevenDays(DATESTRING), Toast.LENGTH_SHORT).show();
+        try {
+            date.setText(Tools.getMonthNameAndDateFormat(SAMPLE_DATE_FORMAT_STRING));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        showDateAccordingToDays();
+
+        showTime(SAMPLE_TIME_FORMAT_STRING);
+    }
+
+    private void showTime(String time) {
+        try {
+            timeViewer.setText(Tools.getTimeSecMinutesHoursDays(time));
+            Toast.makeText(this, "" + Tools.getTimeSecMinutesHoursDays(time), Toast.LENGTH_SHORT).show();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showDateAccordingToDays() {
+        if (Constants.DateAndMonth.LAST_SEVEN_DAY == 7) {
+            try {
+                SAMPLE_DATE_FORMAT_STRING = "2017-09-20 00:00:00";
+
+                date.setText("last Seven Days::" + Tools.getMinDate(SAMPLE_DATE_FORMAT_STRING, Constants.DateAndMonth.LAST_SEVEN_DAY));
+                // Toast.makeText(MainActivity.this, "Last Seven Days"+getLastSevenDays(SAMPLE_DATE_FORMAT_STRING), Toast.LENGTH_SHORT).show();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        if (getMonth == 30) {
+        if (Constants.DateAndMonth.LAST_THIRTY_DAY == 30) {
             try {
-                DATESTRING = "2017-09-30 00:00:00";
+                SAMPLE_DATE_FORMAT_STRING = "2017-09-30 00:00:00";
 
-                monthDate.setText("last 30 Days::" + Tools.getMinDate(DATESTRING, Constants.DateAndMonth.LAST_THIRTY_DAY));
-                // Toast.makeText(MainActivity.this, "Last Seven Days"+getLastSevenDays(DATESTRING), Toast.LENGTH_SHORT).show();
+                monthDate.setText("last 30 Days::" + Tools.getMinDate(SAMPLE_DATE_FORMAT_STRING, Constants.DateAndMonth.LAST_THIRTY_DAY));
+                // Toast.makeText(MainActivity.this, "Last Seven Days"+getLastSevenDays(SAMPLE_DATE_FORMAT_STRING), Toast.LENGTH_SHORT).show();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        if (getNinetyDays == 90) {
+        if (Constants.DateAndMonth.LAST_NINETY_DAY == 90) {
             try {
-                DATESTRING = "2017-12-31 00:00:00";
+                SAMPLE_DATE_FORMAT_STRING = "2017-12-31 00:00:00";
 
-                ninetyDays.setText("last 90 Days::" + Tools.getMinDate(DATESTRING, Constants.DateAndMonth.LAST_NINETY_DAY));
-                // Toast.makeText(MainActivity.this, "Last Seven Days"+getLastSevenDays(DATESTRING), Toast.LENGTH_SHORT).show();
+                ninetyDays.setText("last 90 Days::" + Tools.getMinDate(SAMPLE_DATE_FORMAT_STRING, Constants.DateAndMonth.LAST_NINETY_DAY));
+                // Toast.makeText(MainActivity.this, "Last Seven Days"+getLastSevenDays(SAMPLE_DATE_FORMAT_STRING), Toast.LENGTH_SHORT).show();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
+
+    }
+
+    private void UiListener() {
 
 
         specificDateBtn.setOnClickListener(new View.OnClickListener() {
@@ -90,13 +126,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        tvDateOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    showCalendar(tvDateOne, true);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
+        tvDateTwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    showCalendar(tvDateTwo, false);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void init() {
         date = (TextView) findViewById(R.id.date);
         monthDate = (TextView) findViewById(R.id.dateMonth);
         ninetyDays = (TextView) findViewById(R.id.ninetyDays);
+        tvDateOne = (TextViewNormal) findViewById(R.id.tvDateOne);
+        tvDateTwo = (TextViewNormal) findViewById(R.id.tvDateTwo);
+        timeViewer = (TextViewNormal) findViewById(R.id.timeViewer);
         specificDateBtn = (Button) findViewById(R.id.dateBtn);
         allDateBtn = (Button) findViewById(R.id.allDateBtn);
 
@@ -122,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
              * Set Call back to capture selected date
              */
             specificDate.setCallBack(ondate);
-            specificDate.show(getSupportFragmentManager(),Constants.DateAndMonth.DATE_PICKER_STRING);
+            specificDate.show(getSupportFragmentManager(), Constants.DateAndMonth.DATE_PICKER_STRING);
 
         } else {
 
@@ -149,16 +208,85 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setDefaultDate() throws ParseException {
+        tvDateOne.setText(Tools.changeDateFormatForTextView(Tools.getCurrentDate()));
+        tvDateTwo.setText(Tools.changeDateFormatForTextView(Tools.getCurrentDate()));
+    }
+
+
+    public void showCalendar(TextViewNormal textViewNormal, boolean isStartDateSelected) throws ParseException {
+
+        dateOne = Tools.changeDateFormatForMethods(tvDateOne.getText().toString());
+        dateTwo = Tools.changeDateFormatForMethods(tvDateTwo.getText().toString());
+
+        Date minDate = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT).parse(dateOne);
+        Date maxDate = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT).parse(dateTwo);
+
+        CustomCalender customCalender;
+
+        final Calendar calendar = Calendar.getInstance();
+        if (isStartDateSelected) {
+            calendar.setTime(minDate);
+        } else {
+            calendar.setTime(maxDate);
+        }
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        customCalender = new CustomCalender(textViewNormal, ondate);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, customCalender,
+                year, month, day);
+        //calculate min and max dates (for older versions use System Current TimeMillis
+
+        if (isStartDateSelected) {
+
+            Date dateMax = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT, Locale.ENGLISH).parse(dateTwo);
+            calendar.setTime(dateMax);
+            datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+
+        } else {
+
+            Date dateMin = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT, Locale.ENGLISH).parse(dateOne);
+            calendar.setTime(dateMin);
+            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        }
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            datePickerDialog.setTitle("");//Prevent Date picker from creating extra Title.!
+        }
+
+        datePickerDialog.show();
+
+    }
+
     DatePickerDialog.OnDateSetListener ondate = new DatePickerDialog.OnDateSetListener() {
         @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+            try {
+                dateOne = Tools.changeDateFormatForMethods(tvDateOne.getText().toString());
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            try {
+                dateTwo = Tools.changeDateFormatForMethods(tvDateTwo.getText().toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             monthOfYear++;
             Toast.makeText(
                     MainActivity.this,
                     String.valueOf(year) + "-" + String.format("%02d", monthOfYear)
                             + "-" + String.format("%02d", dayOfMonth),
                     Toast.LENGTH_LONG).show();
+
         }
     };
 

@@ -7,9 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Atif Arif on 9/19/2017.
+ * Created by Muhammad Atif Arif on 9/19/2017.
  */
 
 public class Tools {
@@ -50,6 +51,320 @@ public class Tools {
         String dateNumber = new SimpleDateFormat(Constants.DateAndMonth.DATE_OF_MONTH).format(cal.getTime());//Date Number 01
         String dateMonth = dateNumber + " " + monthName;
         return dateMonth; //01 october
+    }
+
+
+    public static String calculateTime(long seconds) {
+
+        String time="";
+
+
+
+        int day = (int) (seconds / (1000 * 60 * 60 * 24));
+        int hours = (int) ((seconds - (1000 * 60 * 60 * 24 * day)) / (1000 * 60 * 60));
+        int minute = (int) (seconds - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+        int second = (int) ((seconds / 1000) % 60);
+
+
+
+        if(day>0){
+            if(day==1){
+                time =time+day+" day";
+            }else{
+                time =time+day+" days";
+            }
+        }else if(day<1 && hours>0){
+
+            if(hours==1){
+                time =time+hours +" hr";
+            }else{
+                time =time+hours +" hrs";
+            }
+        }else if(hours<1 && minute>0){
+            if(minute==1){
+                time =time+minute +" min";
+            }else{
+                time =time+minute +" mins";
+            }
+        }else if(minute<1 && second>0){
+
+            if(second==1){
+                time =time+second +" sec";
+            }else{
+                time =time+second +" secs";
+            }
+        }else {
+            if(second==1){
+                time =time+second +" sec";
+            }else{
+                time =time+second +" secs";
+            }
+        }
+
+//        int day = (int)TimeUnit.SECONDS.toDays(seconds);
+//        long hours = TimeUnit.SECONDS.toHours(seconds) - (day *24);
+//        long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds)* 60);
+//        long second = TimeUnit.SECONDS.toSeconds(seconds) - (TimeUnit.SECONDS.toMinutes(seconds) *60);
+
+//        int day = (int) TimeUnit.SECONDS.toDays(seconds);
+//        long hours = TimeUnit.SECONDS.toHours(seconds) -
+//                TimeUnit.DAYS.toHours(day);
+//        long minute = TimeUnit.SECONDS.toMinutes(seconds) -
+//                TimeUnit.DAYS.toMinutes(day) -
+//                TimeUnit.HOURS.toMinutes(hours);
+//        long second = TimeUnit.SECONDS.toSeconds(seconds) -
+//                TimeUnit.DAYS.toSeconds(day) -
+//                TimeUnit.HOURS.toSeconds(hours) -
+//                TimeUnit.MINUTES.toSeconds(minute);
+
+
+        //  System.out.println("Day " + day + " Hour " + hours + " Minute " + minute + " Seconds " + second);
+
+        // time = "Day " + day + " : Hour " + hours + " : Minute " + minute + " : Seconds " + second;
+        return time;
+    }
+
+
+
+    //minutes:Hours:days
+    public static String getTimeSecMinutesHoursDays(String dateString) throws ParseException {
+
+
+        SimpleDateFormat endDateFormat = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_TIME_FORMAT);
+        String currentDateAndTime = endDateFormat.format(new Date());
+        Date endDate = endDateFormat.parse(currentDateAndTime);
+
+        SimpleDateFormat startDateFormat = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_TIME_FORMAT);
+        Date startDate = startDateFormat.parse(dateString);
+        // format the java.util.Date object to the desired format
+        String startDateString = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_TIME_FORMAT).format(startDate);
+
+        long startMili = Tools.getMiliSecondsFromDateANDTIME(startDateString);
+        long endMili = Tools.getMiliSecondsFromDateANDTIME(currentDateAndTime);
+
+        long difference = endDate.getTime() - startDate.getTime();
+//       // float difference = getDifferenceTimeInSec(startDate,endDate);
+//        int days = (int) (difference / (1000 * 60 * 60 * 24));
+//        int hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+//        int min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+//        if (hours < 0) {
+//            hours += 24;
+//        }
+//        if (min < 0) {
+//            float newone = (float) min / 60;
+//            min += 60;
+//            hours = (int) (hours + newone);
+//        }
+//
+//        MINUTES=min + MINUTES+ ".";
+//        HOURS=hours + HOURS + ".";
+//        DAYS=  days + DAYS;
+//
+//        if(min==0){
+//            MINUTES="";
+//        }
+//        if(hours==0){
+//            HOURS="";
+//        }
+//        if(days==0){
+//            DAYS="";
+//        }
+//
+//        if(days==1){
+//          minutesHoursDays = YESTERDAY;
+//        }else{
+//            minutesHoursDays =  MINUTES+HOURS+DAYS;
+//        }
+//
+//        String[] separated = minutesHoursDays.split(":");
+//
+//      //  minutesHoursDays =  MINUTES+HOURS+DAYS;
+
+
+
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
+
+        String minutesHoursDays=calculateTime(difference);
+
+        return minutesHoursDays; //minutes:Hours:days
+
+    }
+
+    public static long getMiliSecondsFromDateANDTIME(String myDate) {
+        long miliSec = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_TIME_FORMAT);
+        Date date = null;
+        try {
+            date = sdf.parse(myDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        miliSec = date.getTime();
+        return miliSec;
+    }
+
+
+    public static boolean hasValue(String value) {
+        try {
+            if (value != null && !value.equalsIgnoreCase("null") && !value.equalsIgnoreCase("")) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    public static int getYear(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.YEAR);
+    }
+
+    public static int getMonth(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.MONTH);
+    }
+
+    public static int getDay(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static Date removeTime(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+
+    public static Date firstOfMonth(int month, int year) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DATE, 1);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.YEAR, year);
+
+        return cal.getTime();
+    }
+
+
+    public static String getDateString(Date date) {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy");
+        return dateFormatter.format(date);
+    }
+
+
+    public static Date getDateFromLiterals(int year, int month, int day) {
+        Calendar c = Calendar.getInstance();
+        c.set(year, month, day);
+        return c.getTime();
+    }
+
+
+    public static Date dateFromString(String date) {
+        Date convertedDate = null;
+        SimpleDateFormat format = new SimpleDateFormat("yyy-MM-dd");
+        try {
+            convertedDate = format.parse(date);
+        } catch (Exception e) {
+        }
+
+        return convertedDate;
+    }
+
+
+    public static int daysBetweenDates(Date date1, Date date2) {
+        //milliseconds
+        long different = date2.getTime() - date1.getTime();
+
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+
+        long elapsedDays = different / daysInMilli;
+
+        return (int) elapsedDays;
+    }
+
+
+    public static void calculateTimeSimpleMethod(long seconds) {
+        long sec = seconds % 60;
+        long minutes = seconds % 3600 / 60;
+        long hours = seconds % 86400 / 3600;
+        long days = seconds / 86400;
+
+        System.out.println("Day " + days + " Hour " + hours + " Minute " + minutes + " Seconds " + sec);
+    }
+
+    //22-02-2017 to 22 Feb 2017
+    public static String changeDateFormatForTextView(String dateString) throws ParseException {
+
+        // parse the String "29-07-2013" to a java.util.Date object
+        Date date = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT).parse(dateString);
+        // format the java.util.Date object to the desired format
+        String formattedDate = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT_SHORT_NAME).format(date);
+
+        return formattedDate;
+    }
+
+
+    //22-02-2017 to 22-02-17
+    public static String getDateAccordingToDesireFormat(String dateString) throws ParseException {
+
+        // parse the String "29-07-2013" to a java.util.Date object
+        Date date = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT).parse(dateString);
+        // format the java.util.Date object to the desired format
+        String formattedDate = new SimpleDateFormat(Constants.DateAndMonth.NEW_SAMPLE_DATE_FORMAT).format(date);
+
+        return formattedDate;
+    }
+
+    public static String changeDateFormatForMethods(String dateString) throws ParseException {
+
+        // parse the String "29-07-2013" to a java.util.Date object //"dd MMM yyyy"
+        Date date = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT_SHORT_NAME).parse(dateString); //SAMPLE_DATE_FORMAT_SHORT_NAME
+        // format the java.util.Date object to the desired format
+        String formattedDate = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT).format(date);
+
+        return formattedDate;
+    }
+
+
+    public static String getDurationBreakdown(long millis)
+    {
+        if(millis < 0)
+        {
+            throw new IllegalArgumentException("Duration must be greater than zero!");
+        }
+
+        long days = TimeUnit.MILLISECONDS.toDays(millis);
+        millis -= TimeUnit.DAYS.toMillis(days);
+        long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        millis -= TimeUnit.HOURS.toMillis(hours);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+        millis -= TimeUnit.MINUTES.toMillis(minutes);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(days);
+        sb.append(" Days ");
+        sb.append(hours);
+        sb.append(" Hours ");
+        sb.append(minutes);
+        sb.append(" Minutes ");
+        sb.append(seconds);
+        sb.append(" Seconds");
+
+        return(sb.toString());
     }
 
 }
