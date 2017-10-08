@@ -89,12 +89,11 @@ public class Tools {
                 time =second +" secs";
             }
         }else {
-            if(second==1){
-                time =second +" sec";
-            }else{
-                time =second +" secs";
-            }
+
+        if (second <= 0) {
+            time = "0 sec";
         }
+    }
 //        int day = (int)TimeUnit.SECONDS.toDays(seconds);
 //        long hours = TimeUnit.SECONDS.toHours(seconds) - (day *24);
 //        long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds)* 60);
