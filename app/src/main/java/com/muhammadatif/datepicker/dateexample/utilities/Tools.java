@@ -54,13 +54,13 @@ public class Tools {
     }
 
 
-    public static String calculateTime(long seconds) {
+    public static String calculateTime(long milis) {
 
         String time="";
-        int day = (int) (seconds / (1000 * 60 * 60 * 24));
-        int hours = (int) ((seconds - (1000 * 60 * 60 * 24 * day)) / (1000 * 60 * 60));
-        int minute = (int) (seconds - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hours)) / (1000 * 60);
-        int second = (int) ((seconds / 1000) % 60);
+        int day = (int) (milis / (1000 * 60 * 60 * 24));
+        int hours = (int) ((milis - (1000 * 60 * 60 * 24 * day)) / (1000 * 60 * 60));
+        int minute = (int) (milis - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+        int second = (int) ((milis / 1000) % 60);
 
         if(day>0){
             if(day==1){
@@ -118,8 +118,6 @@ public class Tools {
         return time;
     }
 
-
-
     //minutes:Hours:days
     public static String getTimeSecMinutesHoursDays(String dateString) throws ParseException {
 
@@ -131,7 +129,7 @@ public class Tools {
         SimpleDateFormat startDateFormat = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_TIME_FORMAT);
         Date startDate = startDateFormat.parse(dateString);
         // format the java.util.Date object to the desired format
-        String startDateString = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_TIME_FORMAT).format(startDate);
+      //  String startDateString = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_TIME_FORMAT).format(startDate);
 //        long startMili = Tools.getMiliSecondsFromDateANDTIME(startDateString);
 //        long endMili = Tools.getMiliSecondsFromDateANDTIME(currentDateAndTime);
         long difference = endDate.getTime() - startDate.getTime();
@@ -139,9 +137,9 @@ public class Tools {
 //        String[] separated = minutesHoursDays.split(":");
 //        long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
 
-        String minutesHoursDays=calculateTime(difference);
+        String minutesHoursDays=calculateTime(difference); //minutes:Hours:days
 
-        return minutesHoursDays; //minutes:Hours:days
+        return minutesHoursDays;
 
     }
 

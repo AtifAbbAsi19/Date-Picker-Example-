@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       AppClass.initializeCustomFonts(getAssets());
+        AppClass.initializeCustomFonts(getAssets());
 
         init();
         UiListener();
@@ -214,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
         tvDateTwo.setText(Tools.changeDateFormatForTextView(Tools.getCurrentDate()));
     }
 
-
     public void showCalendar(TextViewNormal textViewNormal, boolean isStartDateSelected) throws ParseException {
 
         dateOne = Tools.changeDateFormatForMethods(tvDateOne.getText().toString());
@@ -287,7 +286,6 @@ public class MainActivity extends AppCompatActivity {
                     String.valueOf(year) + "-" + String.format("%02d", monthOfYear)
                             + "-" + String.format("%02d", dayOfMonth),
                     Toast.LENGTH_LONG).show();
-
         }
     };
 
