@@ -268,19 +268,34 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
+            String date=String.valueOf(year) + "-" + String.format("%02d", monthOfYear)
+                    + "-" + String.format("%02d", dayOfMonth);
+
             try {
                 dateOne = Tools.changeDateFormatForMethods(tvDateOne.getText().toString());
-
+                String dateTime=Tools.getDateWithSuffixAndMonthNameFormat(date,Constants.DateAndMonth.SHORT_MONTH_NAME);
+                Toast.makeText(
+                        MainActivity.this,
+                        dateTime,
+                        Toast.LENGTH_LONG).show();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
             try {
                 dateTwo = Tools.changeDateFormatForMethods(tvDateTwo.getText().toString());
+                String dateTime=Tools.getDateWithSuffixAndMonthNameFormat(date,Constants.DateAndMonth.SHORT_MONTH_NAME);
+                Toast.makeText(
+                        MainActivity.this,
+                        dateTime,
+                        Toast.LENGTH_LONG).show();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
             monthOfYear++;
+
+
+
             Toast.makeText(
                     MainActivity.this,
                     String.valueOf(year) + "-" + String.format("%02d", monthOfYear)

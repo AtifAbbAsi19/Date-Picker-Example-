@@ -31,16 +31,6 @@ public class Tools {
         return date_string;
     }
 
-
-    public static String getCurrentDate() throws ParseException {
-
-        SimpleDateFormat date = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT);
-        String currentDate = date.format(new Date());
-
-        return currentDate;
-    }
-
-
     public static String getMonthNameAndDateFormat(String date) throws ParseException {
 
         // Date Format "2017-10-01 00:00:00"
@@ -52,6 +42,105 @@ public class Tools {
         String dateMonth = dateNumber + " " + monthName;
         return dateMonth; //01 october
     }
+
+    public static long getMiliSecondsFromDate(String myDate) {
+        long miliSec = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT);
+        Date date = null;
+        try {
+            date = sdf.parse(myDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        miliSec = date.getTime();
+        return miliSec;
+    }
+
+    public static int getDaysDifferenceBetweenMiliseconds(long startDate, long endDate) {
+
+        long duration = endDate - startDate;
+
+        long diffInDays = TimeUnit.MILLISECONDS.toDays(duration);
+
+        return (int) diffInDays;
+    }
+
+
+    public static long getCurrentMiliSeconds() {
+        return System.currentTimeMillis();
+    }
+
+
+    public static String getLastDate(String dateString, int days) throws ParseException {
+
+        Date date = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT, Locale.ENGLISH).parse(dateString);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_YEAR, -days);
+        Date newDate = calendar.getTime();
+        calendar.setTime(newDate);
+//        String monthOfYear = new SimpleDateFormat(Constants.DateAndMonth.FULL_MONTH_NAME).format(calendar.getTime());//MMM for short Name(Jun)
+//        String dayOfMonth = new SimpleDateFormat(Constants.DateAndMonth.DATE_OF_MONTH).format(calendar.getTime());//Date Number 01
+//        String year = new SimpleDateFormat(Constants.DateAndMonth.YEAR).format(calendar.getTime());//year
+        String date_string = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT).format(calendar.getTime());
+        return date_string;
+    }
+
+
+    public static String getCurrentDate() throws ParseException {
+
+        SimpleDateFormat date = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_FORMAT);
+        String currentDate = date.format(new Date());
+
+        return currentDate;
+    }
+
+
+    public static String getMonthAndDateFormat(String date, String month) throws ParseException {
+        String dateMonth = " ";
+
+            // Date Format "2017-10-01 00:00:00"
+            Date d = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(date);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(d);
+            String monthName = new SimpleDateFormat(month).format(cal.getTime());//MMM for short Name(Jun)
+            String dateNumber = new SimpleDateFormat("dd").format(cal.getTime());//Date Number 01
+            dateMonth = dateNumber + " " + monthName;
+        return dateMonth;
+    }
+
+    //1st,2nd,3rd,4th, Feb
+    public static String getDateWithSuffixAndMonthNameFormat(String date, String month) throws ParseException {
+
+        // Date Format "2017-10-01 00:00:00"
+        Date d = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(date);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        String monthName = new SimpleDateFormat(month).format(cal.getTime());//MMM for short Name(Jun)
+        String dateNumber = new SimpleDateFormat("dd").format(cal.getTime());//Date Number 01
+        String dateMonth = getDayNumberSuffix(Integer.valueOf(dateNumber)) + " " + monthName;
+        return dateMonth;//4th Feb
+    }
+
+    public static String getDayNumberSuffix(int day) {
+        if (day >= 11 && day <= 13) {
+            return day + "th";
+        }
+        switch (day % 10) {
+            case 1:
+                return day + "st";
+            case 2:
+                return day + "nd";
+            case 3:
+                return day + "rd";
+            case 31:
+                return day + "st";
+            default:
+                return day + "th";
+        }
+    }
+
 
 
     public static String calculateTime(long milis) {
@@ -94,6 +183,18 @@ public class Tools {
             time = "0 sec";
         }
     }
+
+        try {
+            int timeUnitDay = (int) TimeUnit.MILLISECONDS.toDays(milis);
+            long timeUnitHours = TimeUnit.MILLISECONDS.toHours(milis);
+            long timeUnitMinutes = TimeUnit.MILLISECONDS.toMinutes(milis);
+            long timeUnitSeconds = TimeUnit.MILLISECONDS.toSeconds(milis);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
 //        int day = (int)TimeUnit.SECONDS.toDays(seconds);
 //        long hours = TimeUnit.SECONDS.toHours(seconds) - (day *24);
 //        long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds)* 60);
