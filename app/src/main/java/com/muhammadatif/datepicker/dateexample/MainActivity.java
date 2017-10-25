@@ -1,8 +1,11 @@
 package com.muhammadatif.datepicker.dateexample;
 
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.view.ActionProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -24,6 +27,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
+
+import static android.provider.Settings.System.FONT_SCALE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +55,15 @@ public class MainActivity extends AppCompatActivity {
         init();
         UiListener();
 
+
+
+      //  if (Objects.equals(location.get(i).get("campo_categoria").toString(),"Any other Choice"))
+
+
+
+//        Settings.System.putFloat(getBaseContext().getContentResolver(),
+//                Settings.System.FONT_SCALE, (float) 1.0);
+
         try {
             setDefaultDate();
         } catch (ParseException e) {
@@ -62,7 +77,11 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        showDateAccordingToDays();
+        try {
+            showDateAccordingToDays(Tools.getCurrentDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         showTime(SAMPLE_TIME_FORMAT_STRING);
     }
@@ -76,10 +95,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showDateAccordingToDays() {
+    private void showDateAccordingToDays(String SAMPLE_DATE_FORMAT_STRING) {
         if (Constants.DateAndMonth.LAST_SEVEN_DAY == 7) {
             try {
-                SAMPLE_DATE_FORMAT_STRING = "2017-09-20 00:00:00";
+                //SAMPLE_DATE_FORMAT_STRING = "2017-09-20 00:00:00";
 
                 date.setText("last Seven Days::" + Tools.getMinDate(SAMPLE_DATE_FORMAT_STRING, Constants.DateAndMonth.LAST_SEVEN_DAY));
                 // Toast.makeText(MainActivity.this, "Last Seven Days"+getLastSevenDays(SAMPLE_DATE_FORMAT_STRING), Toast.LENGTH_SHORT).show();
@@ -89,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (Constants.DateAndMonth.LAST_THIRTY_DAY == 30) {
             try {
-                SAMPLE_DATE_FORMAT_STRING = "2017-09-30 00:00:00";
+                //SAMPLE_DATE_FORMAT_STRING = "2017-09-30 00:00:00";
 
                 monthDate.setText("last 30 Days::" + Tools.getMinDate(SAMPLE_DATE_FORMAT_STRING, Constants.DateAndMonth.LAST_THIRTY_DAY));
                 // Toast.makeText(MainActivity.this, "Last Seven Days"+getLastSevenDays(SAMPLE_DATE_FORMAT_STRING), Toast.LENGTH_SHORT).show();
@@ -99,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (Constants.DateAndMonth.LAST_NINETY_DAY == 90) {
             try {
-                SAMPLE_DATE_FORMAT_STRING = "2017-12-31 00:00:00";
+               // SAMPLE_DATE_FORMAT_STRING = "2017-12-31 00:00:00";
 
                 ninetyDays.setText("last 90 Days::" + Tools.getMinDate(SAMPLE_DATE_FORMAT_STRING, Constants.DateAndMonth.LAST_NINETY_DAY));
                 // Toast.makeText(MainActivity.this, "Last Seven Days"+getLastSevenDays(SAMPLE_DATE_FORMAT_STRING), Toast.LENGTH_SHORT).show();
@@ -273,6 +292,9 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 dateOne = Tools.changeDateFormatForMethods(tvDateOne.getText().toString());
+
+
+
                 String dateTime=Tools.getDateWithSuffixAndMonthNameFormat(date,Constants.DateAndMonth.SHORT_MONTH_NAME);
                 Toast.makeText(
                         MainActivity.this,
@@ -304,5 +326,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
+    /** @hide */
+    public static void getConfigurationForUser(ContentResolver cr,
+                                               Configuration outConfig, int userHandle) {
+        outConfig.fontScale = Settings.System.getFloat(
+                cr, FONT_SCALE, outConfig.fontScale);
+        if (outConfig.fontScale < 0) {
+            outConfig.fontScale = 1;
+        }
+    }
 }

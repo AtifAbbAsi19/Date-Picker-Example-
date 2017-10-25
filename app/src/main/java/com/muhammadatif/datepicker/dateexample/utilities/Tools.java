@@ -1,5 +1,9 @@
 package com.muhammadatif.datepicker.dateexample.utilities;
 
+import android.content.ContentResolver;
+import android.content.res.Configuration;
+import android.provider.Settings;
+
 import com.muhammadatif.datepicker.dateexample.globals.Constants;
 
 import java.text.ParseException;
@@ -8,6 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
+import static android.provider.Settings.System.FONT_SCALE;
 
 /**
  * Created by Muhammad Atif Arif on 9/19/2017.
@@ -405,5 +411,16 @@ public class Tools {
 
         return(sb.toString());
     }
+
+
+//    /** @hide */
+//    public static void getConfigurationForUser(ContentResolver cr,
+//                                               Configuration outConfig, int userHandle) {
+//        outConfig.fontScale = Settings.System.getFloatForUser(
+//                cr, FONT_SCALE, outConfig.fontScale, userHandle);
+//        if (outConfig.fontScale < 0) {
+//            outConfig.fontScale = 1;
+//        }
+//    }
 
 }
