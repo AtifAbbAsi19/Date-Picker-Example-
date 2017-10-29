@@ -4,3 +4,5 @@ select date by clicking view will allow user to select date between a time perio
 showTime() Function will show you Total Days, hours ,minutes and second count you can modify it accroding to your need.!
 select specific date will allow use to select calander dialog date between two dates.!
 you can get specific dates like last 30 days  date or 90 or your desired count.!
+There is a class Named as Tools. it contains different Function of date that will allow you to caluclate days between two dates
+
