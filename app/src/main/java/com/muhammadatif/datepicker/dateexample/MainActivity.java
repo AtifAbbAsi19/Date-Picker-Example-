@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.muhammadatif.datepicker.dateexample.application.AppClass;
 import com.muhammadatif.datepicker.dateexample.dialogfragment.AllDatePickerFragment;
 import com.muhammadatif.datepicker.dateexample.dialogfragment.DatePickerFragment;
+import com.muhammadatif.datepicker.dateexample.dialogfragment.DatePickerFragmentWithTextView;
 import com.muhammadatif.datepicker.dateexample.dialogfragment.DateTimeDialog;
 import com.muhammadatif.datepicker.dateexample.dialogfragment.TimePickerFragment;
 import com.muhammadatif.datepicker.dateexample.globals.Constants;
@@ -245,6 +246,31 @@ public class MainActivity extends AppCompatActivity {
         specificDateBtn = (Button) findViewById(R.id.dateBtn);
         allDateBtn = (Button) findViewById(R.id.allDateBtn);
         timePicker = (Button) findViewById(R.id.timePicker);
+
+    }
+
+
+
+    private void showDateInTextViewPicker(TextViewNormal MyTelenorTextViewNormal) {
+
+        DatePickerFragmentWithTextView specificDate = new DatePickerFragmentWithTextView();
+
+        Calendar calender = Calendar.getInstance();
+        //calender.setTimeInMillis(0);
+        Bundle args = new Bundle();
+        args.putInt("year", calender.get(Calendar.YEAR));
+        args.putInt("month", calender.get(Calendar.MONTH));
+        args.putInt("day", calender.get(Calendar.DAY_OF_MONTH));
+        specificDate.setArguments(args);
+
+//        specificDate.setCallBack(ondate);
+        specificDate.setSetTextView(MyTelenorTextViewNormal);
+
+//        android.support.v4.app.FragmentManager manager = getActivity().getSupportFragmentManager(); //Fragment
+        android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
+
+        specificDate.show(manager, Constants.DateAndMonth.DATE_PICKER_STRING);
+
 
     }
 
