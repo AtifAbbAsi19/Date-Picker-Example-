@@ -106,13 +106,13 @@ public class Tools {
     public static String getMonthAndDateFormat(String date, String month) throws ParseException {
         String dateMonth = " ";
 
-            // Date Format "2017-10-01 00:00:00"
-            Date d = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(date);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(d);
-            String monthName = new SimpleDateFormat(month).format(cal.getTime());//MMM for short Name(Jun)
-            String dateNumber = new SimpleDateFormat("dd").format(cal.getTime());//Date Number 01
-            dateMonth = dateNumber + " " + monthName;
+        // Date Format "2017-10-01 00:00:00"
+        Date d = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(date);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        String monthName = new SimpleDateFormat(month).format(cal.getTime());//MMM for short Name(Jun)
+        String dateNumber = new SimpleDateFormat("dd").format(cal.getTime());//Date Number 01
+        dateMonth = dateNumber + " " + monthName;
         return dateMonth;
     }
 
@@ -148,47 +148,46 @@ public class Tools {
     }
 
 
-
     public static String calculateTime(long milis) {
 
-        String time="";
+        String time = "";
         int day = (int) (milis / (1000 * 60 * 60 * 24));
         int hours = (int) ((milis - (1000 * 60 * 60 * 24 * day)) / (1000 * 60 * 60));
         int minute = (int) (milis - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hours)) / (1000 * 60);
         int second = (int) ((milis / 1000) % 60);
 
-        if(day>0){
-            if(day==1){
-                time =day+" day";
-            }else{
-                time =day+" days";
+        if (day > 0) {
+            if (day == 1) {
+                time = day + " day";
+            } else {
+                time = day + " days";
             }
-        }else if(day<1 && hours>0){
+        } else if (day < 1 && hours > 0) {
 
-            if(hours==1){
-                time =hours +" hr";
-            }else{
-                time =hours +" hrs";
+            if (hours == 1) {
+                time = hours + " hr";
+            } else {
+                time = hours + " hrs";
             }
-        }else if(hours<1 && minute>0){
-            if(minute==1){
-                time =minute +" min";
-            }else{
-                time =minute +" mins";
+        } else if (hours < 1 && minute > 0) {
+            if (minute == 1) {
+                time = minute + " min";
+            } else {
+                time = minute + " mins";
             }
-        }else if(minute<1 && second>0){
+        } else if (minute < 1 && second > 0) {
 
-            if(second==1){
-                time =second +" sec";
-            }else{
-                time =second +" secs";
+            if (second == 1) {
+                time = second + " sec";
+            } else {
+                time = second + " secs";
             }
-        }else {
+        } else {
 
-        if (second <= 0) {
-            time = "0 sec";
+            if (second <= 0) {
+                time = "0 sec";
+            }
         }
-    }
 
         try {
             int timeUnitDay = (int) TimeUnit.MILLISECONDS.toDays(milis);
@@ -198,7 +197,6 @@ public class Tools {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
 
 //        int day = (int)TimeUnit.SECONDS.toDays(seconds);
@@ -235,7 +233,7 @@ public class Tools {
         SimpleDateFormat startDateFormat = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_TIME_FORMAT);
         Date startDate = startDateFormat.parse(dateString);
         // format the java.util.Date object to the desired format
-      //  String startDateString = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_TIME_FORMAT).format(startDate);
+        //  String startDateString = new SimpleDateFormat(Constants.DateAndMonth.SAMPLE_DATE_TIME_FORMAT).format(startDate);
 //        long startMili = Tools.getMiliSecondsFromDateANDTIME(startDateString);
 //        long endMili = Tools.getMiliSecondsFromDateANDTIME(currentDateAndTime);
         long difference = endDate.getTime() - startDate.getTime();
@@ -243,7 +241,7 @@ public class Tools {
 //        String[] separated = minutesHoursDays.split(":");
 //        long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
 
-        String minutesHoursDays=calculateTime(difference); //minutes:Hours:days
+        String minutesHoursDays = calculateTime(difference); //minutes:Hours:days
 
         return minutesHoursDays;
 
@@ -384,10 +382,38 @@ public class Tools {
     }
 
 
-    public static String getDurationBreakdown(long millis)
-    {
-        if(millis < 0)
-        {
+
+    /*Super Script for Date getDayNumberSuffixWithSuperScript
+     * String str = getFormatedDate();
+        txtDate.setText(Html.fromHtml(str));
+      *
+      * */
+
+    private String getFormatedDate() {
+        String dayNumberSuffix = getDayNumberSuffixWithSuperScript(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        SimpleDateFormat dateFormat = new SimpleDateFormat(" d'" + dayNumberSuffix + "' MMMM yyyy");
+        return dateFormat.format(Calendar.getInstance().getTime());
+    }
+
+    private String getDayNumberSuffixWithSuperScript(int day) {
+        if (day >= 11 && day <= 13) {
+            return "<sup>th</sup>";
+        }
+        switch (day % 10) {
+            case 1:
+                return "<sup>st</sup>";
+            case 2:
+                return "<sup>nd</sup>";
+            case 3:
+                return "<sup>rd</sup>";
+            default:
+                return "<sup>th</sup>";
+        }
+    }
+
+
+    public static String getDurationBreakdown(long millis) {
+        if (millis < 0) {
             throw new IllegalArgumentException("Duration must be greater than zero!");
         }
 
@@ -409,7 +435,7 @@ public class Tools {
         sb.append(seconds);
         sb.append(" Seconds");
 
-        return(sb.toString());
+        return (sb.toString());
     }
 
 
@@ -422,5 +448,6 @@ public class Tools {
 //            outConfig.fontScale = 1;
 //        }
 //    }
+
 
 }

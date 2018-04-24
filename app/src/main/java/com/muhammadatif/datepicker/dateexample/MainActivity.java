@@ -1,6 +1,7 @@
 package com.muhammadatif.datepicker.dateexample;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -12,16 +13,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.muhammadatif.datepicker.dateexample.application.AppClass;
 import com.muhammadatif.datepicker.dateexample.dialogfragment.AllDatePickerFragment;
 import com.muhammadatif.datepicker.dateexample.dialogfragment.DatePickerFragment;
+import com.muhammadatif.datepicker.dateexample.dialogfragment.DateTimeDialog;
+import com.muhammadatif.datepicker.dateexample.dialogfragment.TimePickerFragment;
 import com.muhammadatif.datepicker.dateexample.globals.Constants;
 import com.muhammadatif.datepicker.dateexample.utilities.Tools;
 import com.muhammadatif.datepicker.dateexample.widgets.CustomCalender;
 import com.muhammadatif.datepicker.dateexample.widgets.TextViewNormal;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,8 +39,8 @@ import static android.provider.Settings.System.FONT_SCALE;
 public class MainActivity extends AppCompatActivity {
 
 
-    TextView date, monthDate, ninetyDays;
-    Button specificDateBtn, allDateBtn;
+    TextView date, monthDate, ninetyDays,marqueeText;
+    Button specificDateBtn, allDateBtn, timePicker;
 
     String SAMPLE_DATE_FORMAT_STRING = "2017-10-01 00:00:00";
     String SAMPLE_TIME_FORMAT_STRING = "2017-10-07 18:17:05";
@@ -43,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     String dateOne, dateTwo;
 
     TextViewNormal tvDateOne, tvDateTwo, timeViewer;
+
+    private TimePicker timePicker1;
 
 
     @Override
@@ -56,9 +63,7 @@ public class MainActivity extends AppCompatActivity {
         UiListener();
 
 
-
-      //  if (Objects.equals(location.get(i).get("campo_categoria").toString(),"Any other Choice"))
-
+        //  if (Objects.equals(location.get(i).get("campo_categoria").toString(),"Any other Choice"))
 
 
 //        Settings.System.putFloat(getBaseContext().getContentResolver(),
@@ -118,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (Constants.DateAndMonth.LAST_NINETY_DAY == 90) {
             try {
-               // SAMPLE_DATE_FORMAT_STRING = "2017-12-31 00:00:00";
+                // SAMPLE_DATE_FORMAT_STRING = "2017-12-31 00:00:00";
 
                 ninetyDays.setText("last 90 Days::" + Tools.getMinDate(SAMPLE_DATE_FORMAT_STRING, Constants.DateAndMonth.LAST_NINETY_DAY));
                 // Toast.makeText(MainActivity.this, "Last Seven Days"+getLastSevenDays(SAMPLE_DATE_FORMAT_STRING), Toast.LENGTH_SHORT).show();
@@ -131,6 +136,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void UiListener() {
 
+
+        timePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showTimePicker();
+
+            }
+        });
+
+
+        marqueeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DateTimeDialog dateTimeDialog = new DateTimeDialog();
+                dateTimeDialog.show(getSupportFragmentManager(), "haskj");
+            }
+        });
 
         specificDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,15 +192,59 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void showTimePicker() {
+
+
+        TimePickerFragment timePickerFragment = new TimePickerFragment();
+
+        timePickerFragment.setCallBack(timePickerListener);
+
+        timePickerFragment.show(getSupportFragmentManager(), "TimePicker");
+
+    }
+
+    private TimePickerDialog.OnTimeSetListener timePickerListener =
+            new TimePickerDialog.OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int selectedHour,
+                                      int selectedMinute) {
+
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.HOUR_OF_DAY, selectedHour);// for 6 hour
+                    calendar.set(Calendar.MINUTE, selectedMinute);// for 0 min
+
+
+                    Date currentLocalTime = calendar.getTime();
+                    DateFormat date = new SimpleDateFormat("hh:mm a");
+                    String localTime = date.format(currentLocalTime);
+
+
+//                    int hour= calendar.get(Calendar.HOUR);
+//                    int  minute=calendar.get(Calendar.MINUTE);
+//                    int am_pm= calendar.get(Calendar.AM_PM);
+//                    String AM_PM=TimePickerFragment.isAM_PM(am_pm);
+//
+//                    String time= hour+":"+minute +":"+AM_PM;
+
+
+//                    Toast.makeText(MainActivity.this, "Time: "+time, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Local Time: " + localTime, Toast.LENGTH_SHORT).show();
+
+
+                }
+            };
+
     private void init() {
         date = (TextView) findViewById(R.id.date);
         monthDate = (TextView) findViewById(R.id.dateMonth);
         ninetyDays = (TextView) findViewById(R.id.ninetyDays);
+        marqueeText = (TextView) findViewById(R.id.marqueeText);
         tvDateOne = (TextViewNormal) findViewById(R.id.tvDateOne);
         tvDateTwo = (TextViewNormal) findViewById(R.id.tvDateTwo);
         timeViewer = (TextViewNormal) findViewById(R.id.timeViewer);
         specificDateBtn = (Button) findViewById(R.id.dateBtn);
         allDateBtn = (Button) findViewById(R.id.allDateBtn);
+        timePicker = (Button) findViewById(R.id.timePicker);
 
     }
 
@@ -287,15 +354,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-            String date=String.valueOf(year) + "-" + String.format("%02d", monthOfYear)
+            String date = String.valueOf(year) + "-" + String.format("%02d", monthOfYear)
                     + "-" + String.format("%02d", dayOfMonth);
 
             try {
                 dateOne = Tools.changeDateFormatForMethods(tvDateOne.getText().toString());
 
 
-
-                String dateTime=Tools.getDateWithSuffixAndMonthNameFormat(date,Constants.DateAndMonth.SHORT_MONTH_NAME);
+                String dateTime = Tools.getDateWithSuffixAndMonthNameFormat(date, Constants.DateAndMonth.SHORT_MONTH_NAME);
                 Toast.makeText(
                         MainActivity.this,
                         dateTime,
@@ -305,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
             }
             try {
                 dateTwo = Tools.changeDateFormatForMethods(tvDateTwo.getText().toString());
-                String dateTime=Tools.getDateWithSuffixAndMonthNameFormat(date,Constants.DateAndMonth.SHORT_MONTH_NAME);
+                String dateTime = Tools.getDateWithSuffixAndMonthNameFormat(date, Constants.DateAndMonth.SHORT_MONTH_NAME);
                 Toast.makeText(
                         MainActivity.this,
                         dateTime,
@@ -317,7 +383,6 @@ public class MainActivity extends AppCompatActivity {
             monthOfYear++;
 
 
-
             Toast.makeText(
                     MainActivity.this,
                     String.valueOf(year) + "-" + String.format("%02d", monthOfYear)
@@ -326,7 +391,9 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    /** @hide */
+    /**
+     * @hide
+     */
     public static void getConfigurationForUser(ContentResolver cr,
                                                Configuration outConfig, int userHandle) {
         outConfig.fontScale = Settings.System.getFloat(

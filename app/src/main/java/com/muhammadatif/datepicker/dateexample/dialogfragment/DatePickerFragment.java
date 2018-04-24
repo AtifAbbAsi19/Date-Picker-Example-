@@ -41,6 +41,7 @@ public class DatePickerFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         Calendar calendar = Calendar.getInstance();
 
         year = calendar.get(Calendar.YEAR);
